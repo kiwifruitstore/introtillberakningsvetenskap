@@ -42,3 +42,6 @@ print(np.sum(x))
 
 r = np.linspace(0, 100, 101)
 print(r)
+r[0:-1:2] *= 2
+r[1:-1:2] *= 4
+print(r)
