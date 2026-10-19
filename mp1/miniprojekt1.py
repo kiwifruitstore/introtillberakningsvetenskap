@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import quad
-
+np.set_printoptions(legacy='1.25')
 """
 från beräkningarna i fråga 1
 
@@ -73,13 +73,13 @@ def simpsons(func, a, b, n):
     S = (h/3) * np.sum(fx)
     return S
 
-
+"""
 # använd humps funktion
 def humps(x):
     return 1 / ((x-.3)**2 + .01) + 1/((x-.9)**2 + .04) - 6
 # ta steglängder
 steglista = [2**n for n in range(2, 17)]
-print(steglista)
+#print(steglista)
 real_integral, err = quad(humps, 0, 1, epsabs=1e-12, epsrel=1e-12) # = ln2
 
 felkvoter = []
@@ -92,6 +92,7 @@ for i in steglista:
     testkvot = fel2/fel1
     felmarginal.append(np.abs(fel1))
     felkvoter.append(testkvot)
+    #print(fel1)
     
     
 felmarginal = np.array(felmarginal)
@@ -103,10 +104,44 @@ steglista = steglista[::-1]
 #plt.loglog(h_lista, fel_trapets, "*-", label="Trapets")
 #plt.loglog(h_lista, h_lista**2, "--", label="h^2")
 
-print(felkvoter)
+#print(felkvoter)
+#plt.loglog(steglista, felmarginal, "*-", label="Simpson")
+ 
+#plt.loglog(steglista, steglista**4, "--", label="h^4")
+#plt.xlabel("h"); plt.legend()
+
+#plt.show()
+"""
+def w(x):
+    return 20 * np.exp(-0.001 * x**2)
+
+def hydro(x):
+    return 62.5 * x * w(x)
+
+
+steglista = [2**n for n in range(2, 17)]
+real_integral, err = quad(hydro, 0, 1, epsabs=1e-12, epsrel=1e-12) # = ln2
+
+felkvoter = []
+felmarginal = []
+for i in steglista:
+    experiment1 = simpsons(hydro, 0, 1, int(i)) # Q(h)
+    experiment2 = simpsons(hydro, 0, 1, int(i/2)) # Q(2h)
+    fel1 = real_integral - experiment1
+    fel2 = real_integral - experiment2
+    testkvot = fel2/fel1
+    felmarginal.append(np.abs(fel1))
+    felkvoter.append(testkvot)
+    
+    
+felmarginal = np.array(felmarginal)
+steglista = np.array(steglista)
+steglista = 1 / steglista
+
 plt.loglog(steglista, felmarginal, "*-", label="Simpson")
  
 plt.loglog(steglista, steglista**4, "--", label="h^4")
 plt.xlabel("h"); plt.legend()
 
 plt.show()
+
